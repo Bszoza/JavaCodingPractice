@@ -1,0 +1,75 @@
+Collections
+public class Main {
+    public static void main(String[] args) {
+
+        List<String> names = List.of("Anna", "Jan", "Anna", "Ewa", "Jan", "Tomek", "Ewa");
+        Set<String> set = new HashSet<>(names);
+        System.out.println(set);
+        Map<String, Integer> map = new HashMap<>();
+        for (String name : names) {
+            map.put(name, map.getOrDefault(name, 0) + 1);
+        }
+        map.forEach((k, v) -> System.out.println(k + ": " + v));
+        Queue<String> queue = new LinkedList<>(names);
+        while (!queue.isEmpty()) {
+            System.out.println(queue.poll());
+        }
+    }
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Optional
+        List<User> users = List.of(
+                new User("Anna", "anna@example.com"),
+                new User("Jan", "jan@example.com"),
+                new User("Ewa", "ewa@example.com")
+        );
+        String emailToFind = "jan@example.com";
+        Optional<User> result = findByEmail(users, emailToFind);
+        String output = result.isPresent() ? result.get().getEmail() : "Nie znaleziono";
+
+            private static Optional<User> findByEmail(List <User> users,String email) {
+
+                for(User user : users) {
+                    if(user.getEmail().equalsIgnoreCase(email)) {
+                        return Optional.of(user);
+                    }
+                }
+                return Optional.empty();
+            }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Compare i CompareTo
+        List<Product> products = new ArrayList<>();
+        products.add(new Product("Komputer", 165000.00));
+        products.add(new Product("Monitor", 1650.00));
+        products.add(new Product("Słuchawki", 265.00));
+        products.add(new Product("Komputer", 165000.00));
+
+        System.out.println(products.get(0).compareTo(products.get(1)));
+        System.out.println(products.get(0).compareTo(products.get(3)));
+
+        System.out.println(products);
+        products.sort(new Comparator<Product>() {
+            @Override
+            public int compare(Product o1, Product o2) {
+                return o1.getPrice().compareTo(o2.getPrice());
+            }
+        });
+
+        System.out.println(products);
+    }
+
+        @Override
+        public int compareTo(Product o) {
+            return this.name.compareTo(o.name);
+        }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Streamy
+public class Main {
+    public static void main(String[] args) {
+        List<Integer> numbers = List.of(4, 2, 7, 2, 8, 4, 6, 3, 7);
+        List<Integer> sorted = numbers.stream().distinct().sorted().filter(n -> n%2==0).toList();
+        sorted.forEach(System.out::println);
+        Integer sum = sorted.stream().mapToInt(n->n).sum();
+        System.out.println(sum);
+    }
+}
