@@ -1,3 +1,4 @@
+import javax.xml.transform.Source;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
@@ -9,5 +10,6 @@ public class Main {
         sorted.forEach(System.out::println);
         Integer sum = sorted.stream().mapToInt(n -> n).sum();
         System.out.println(sum);
+        System.out.println(12);
     }
 }
