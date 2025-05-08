@@ -11,5 +11,7 @@ public class Main {
         Integer sum = sorted.stream().mapToInt(n -> n).sum();
         System.out.println(sum);
         System.out.println(12);
+        System.out.println(12);
+        System.out.println(12);
     }
 }
