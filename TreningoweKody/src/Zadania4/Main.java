@@ -1,58 +1,117 @@
 package Zadania4;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import Zadania5.*;
+import Zadania5.User;
+
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        List<Product> products = new ArrayList<>();
-        products.add(new Product("ASDASD", 1.99, true));
-        products.add(new Product("ASDAsadSD", 13.99, false));
-        products.add(new Product("ASDASsadasdD", 12.21, false));
-        products.add(new Product("ASDASdsadaD", 10.99, true));
-        products.add(new Product("ASDASdsadasD", 9.99, true));
-
-        List<Product> productsAvailable = new ArrayList<>(products = products.stream().filter(Product::getAvailable).toList());
-        System.out.println(products);
-
-        productsAvailable.sort(new ProductPriceComparator());
-        System.out.println(productsAvailable);
-
-        List<String> productNames = products.stream().map(Product::getName).toList();
-        System.out.println(productNames);
         //Zadanie 2
+        List<Book> books = new ArrayList<Book>();
+        books.add(new Book("Raz", "Adam", 2004, 7.35));
+        books.add(new Book("Raz", "Bart", 2004, 7.40));
+        books.add(new Book("Dwa", "Girt", 2000, 5.55));
+        books.add(new Book("Trzy", "Dsas", 1990, 3.34));
+        books.add(new Book("Baks", "Rast", 2015, 8.35));
+        books.add(new Book("Fers", "Tys", 2001, 3.35));
+
+        Collections.sort(books);
+        System.out.println(books);
+
+        books.sort(new BookComparators.BookTitleComparator());
+        System.out.println(books);
+
+        books.sort(new BookComparators.BookRatingComparator());
+        System.out.println(books);
+
+        books.sort(new BookComparators.BookAuthorThenTitleComparator());
+        System.out.println(books);
+
+        //Zadanie 1
+        Map<String, List<Integer>> studentsGrades = new HashMap<>();
+        List<Student> students = new ArrayList<>();
+        students.add(new Student("Adam", 20, new ArrayList<>(List.of(3, 4, 5))));
+        students.add(new Student("Adam", 20, new ArrayList<>(List.of(3, 4, 5))));
+        students.add(new Student("Ada", 19, new ArrayList<>(List.of(4, 4, 5))));
+        students.add(new Student("Kaja", 21, new ArrayList<>(List.of(5, 5, 5))));
+        students.add(new Student("Dawid", 22, new ArrayList<>(List.of(3, 3, 3))));
+
+        students.forEach(student -> {
+            studentsGrades.put(student.getName(), student.getGrades());
+        });
+        students.forEach(student -> {
+            int sum = 0;
+            for (int i = 0; i < student.getGrades().size(); i++) {
+                sum += student.getGrades().get(i);
+            }
+            System.out.println(student.getName() + " średnia: " + (double) sum / student.getGrades().size());
+        });
+
+        Set<Student> studentSet = new HashSet<>(students);
+        System.out.println(studentSet);
+
+        Queue<Student> studentQueue = new LinkedList<>();
+        studentQueue.add(students.get(0));
+        studentQueue.add(students.get(1));
+        studentQueue.add(students.get(2));
+        studentQueue.add(students.get(3));
+        studentQueue.add(students.get(4));
+
+
+        System.out.println(studentQueue);
+        System.out.println(studentQueue.poll());
+        System.out.println(studentQueue.poll());
+        System.out.println(studentQueue.poll());
+        System.out.println(studentQueue.poll());
+        System.out.println(studentQueue);
 
         List<User> users = new ArrayList<>();
-        users.add(new User("Adam", Optional.of("123123123")));
-        users.add(new User("Adam", Optional.empty()));
-        users.add(new User("Adam", Optional.of("123123123")));
-        users.add(new User("Adam", Optional.empty()));
-        users.add(new User("Adam", Optional.of("123123123")));
+        List<Transaction> transactions = new ArrayList<Transaction>();
+        users.add(new User("Adam"));
+        users.add(new User("Krzysztof"));
+        users.add(new User("Ada"));
+        users.add(new User("Julia"));
 
-        for (User user : users) {
-            user.getPhoneNumber().ifPresentOrElse(System.out::println, () -> System.out.println("Nie ma telefonu dla: " + user.getName()));
-        }
+        transactions.add(new Transaction(users.get(0).getName(), 100.54, "Garden"));
+        transactions.add(new Transaction(users.get(1).getName(), 2000.54, "Food"));
+        transactions.add(new Transaction(users.get(2).getName(), 1001.44, "Garden"));
+        transactions.add(new Transaction(users.get(3).getName(), 50.74, "Car"));
 
-        List<Employee> employees = new ArrayList<>();
-        employees.add(new Employee("Adam",21,7800.00));
-        employees.add(new Employee("Ewa",20,2800.00));
-        employees.add(new Employee("Piotr",18,8800.00));
-        employees.add(new Employee("Marian",26,11800.00));
+        transactions.stream().filter(u -> u.getAmount() > 1000).forEach(System.out::println);
+        transactions.stream().filter(u -> u.getCategory().equalsIgnoreCase("food")).
+                max(new TransactionComparators()).ifPresent(System.out::println);
+        transactions.stream().sorted(new TransactionComparators()).forEach(System.out::println);
+        transactions.stream().sorted(new TransactionComparators().reversed()).forEach(System.out::println);
 
-        employees.sort(Employee::compareTo);
-        employees.forEach(System.out::println);
-        employees.sort(EmployeeComparators.employeeAgeComparator);
-        employees.forEach(System.out::println);
-        employees.sort(EmployeeComparators.employeeSalaryComparator);
-        employees.forEach(System.out::println);
+        List<Profile> profiles = new ArrayList<>();
+        profiles.add(new Profile("Afgan", Optional.of("afghan.gmail"), Optional.of(new Address("Gdynia", Optional.of("123-34")))));
+        profiles.add(new Profile("Adgsdan", Optional.of("afgsdashan.gmail"), Optional.of(new Address("Gdansk", Optional.of("1323-36")))));
+        profiles.add(new Profile("Afgan", Optional.of("afghan.gmail"), Optional.empty()));
+        profiles.add(new Profile("Afgan", Optional.empty(), Optional.of(new Address("Gdynia", Optional.of("123-34")))));
+
+        profiles.stream().forEach(x -> {
+            x.getAddress().ifPresentOrElse(System.out::println, () -> {
+                System.out.println("Brak adresu");
+            });
+            x.getEmail().ifPresentOrElse(System.out::println, () -> {
+                System.out.println("Brak maila");
+            });
+        });
+
     }
 
-    public static class ProductPriceComparator implements Comparator<Product> {
+    public static class TransactionComparators implements Comparator<Transaction> {
         @Override
-        public int compare(Product o1, Product o2) {
-            return Double.compare(o1.getPrice(), o2.getPrice());
+        public int compare(Transaction o1, Transaction o2) {
+            return Double.compare(o1.getAmount(), o2.getAmount());
+        }
+    }
+
+    public static class TransactionComparatorsUser implements Comparator<Transaction> {
+        @Override
+        public int compare(Transaction o1, Transaction o2) {
+            return String.CASE_INSENSITIVE_ORDER.compare(o1.getUser(), o2.getUser());
         }
     }
 }
