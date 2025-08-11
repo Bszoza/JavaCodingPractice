@@ -50,6 +50,7 @@ public class HomeTask implements Comparable<HomeTask> {
         return Comparator
                 .comparing(HomeTask::getPriority)
                 .thenComparing(HomeTask::getDone)
+                .thenComparing(HomeTask::getTitle)
                 .compare(this, o);
     }
 
